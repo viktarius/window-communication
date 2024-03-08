@@ -4,24 +4,6 @@ export type GlobalPoint = {
 };
 
 export interface Point {
-    centerX: number;
-    centerY: number;
+    x: number;
+    y: number;
 }
-
-export enum MessageType {
-    SYNC = 'sync',
-    DATA = 'data'
-}
-
-export type SyncEventType = {
-    type: MessageType.SYNC,
-    id: string,
-}
-
-export type DataEventType = {
-    type: MessageType.DATA,
-    id: string,
-    point: GlobalPoint,
-}
-
-export type MessageEventType = SyncEventType | DataEventType;

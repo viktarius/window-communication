@@ -1,5 +1,6 @@
-import { GlobalPoint, MessageType } from '../core/types.ts';
+import { GlobalPoint } from '../core/types.ts';
 import { DrawService } from './draw.service.ts';
+import { MessageType, ResponseEventType } from '../workers/shared.types.ts';
 
 export class WindowEventService {
     private worker: SharedWorker = new SharedWorker(new URL('../workers/shared.ts', import.meta.url))
@@ -9,7 +10,7 @@ export class WindowEventService {
 
     private windowId: string = (+new Date).toString();
     private prevWindowState: any = {};
-    private point: GlobalPoint = {
+    private globalPoint: GlobalPoint = {
         globalXPosition: window.innerWidth / 2 + window.screenX,
         globalYPosition: window.innerHeight / 2 + window.screenY,
     };
@@ -20,22 +21,21 @@ export class WindowEventService {
 
         window.addEventListener('resize', () => {
             this.drawService.updateCanvasSize();
-            this.point = {
+            this.globalPoint = {
                 globalXPosition: window.innerWidth / 2 + window.screenX,
                 globalYPosition: window.innerHeight / 2 + window.screenY,
             }
         }, false);
         window.addEventListener('browserMove', () => {
-            console.log(this.point);
-            this.sendMessage(this.point);
-            this.drawService.draw(this.lastData, this.point);
+            console.log(this.globalPoint);
+            this.sendMessage(this.globalPoint);
+            this.drawService.draw(this.lastData, this.globalPoint);
         });
         setInterval(this.detectBrowserMove.bind(this), 200);
 
-        this.drawService.draw(this.lastData, this.point);
+        this.drawService.draw(this.lastData, this.globalPoint);
 
-        this.worker.port.onmessage = (e: MessageEvent<{ id: string, point: GlobalPoint }[] | MessageType.SYNC>) => {
-            console.log(e.data);
+        this.worker.port.onmessage = (e: MessageEvent<ResponseEventType>) => {
             if (e.data === MessageType.SYNC) {
                 this.worker.port.postMessage({
                     id: this.windowId,
@@ -43,13 +43,13 @@ export class WindowEventService {
                 })
             } else {
                 this.lastData = e.data.filter(({ id }) => id !== this.windowId).map(({ point }) => point);
-                this.drawService.draw(this.lastData, this.point);
+                this.drawService.draw(this.lastData, this.globalPoint);
             }
         };
     }
 
     private detectBrowserMove(): void {
-        this.point = {
+        this.globalPoint = {
             globalXPosition: window.innerWidth / 2 + window.screenX,
             globalYPosition: window.innerHeight / 2 + window.screenY,
         };
@@ -76,5 +76,4 @@ export class WindowEventService {
             point
         })
     }
-
 }

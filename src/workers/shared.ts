@@ -1,24 +1,16 @@
-import { MessageEventType, GlobalPoint } from '../core/types.ts';
+import { GlobalPoint } from '../core/types.ts';
+import { IWindowState, RequestEventType } from './shared.types.ts';
 
-let windowsState: Record<string, {
-    point: GlobalPoint;
-    port: MessagePort;
-    isActive?: boolean;
-}> = {};
-
-// const ports: any[] = [];
+let windowsState: Record<string, IWindowState> = {};
 
 onconnect = function (e) {
     const currentPort = e.ports[0];
 
-    // ports.push(currentPort);
-
-    currentPort.onmessage = (ev: MessageEvent<MessageEventType>) => {
+    currentPort.onmessage = (ev: MessageEvent<RequestEventType>) => {
         const message = ev.data;
 
         switch (message.type) {
             case 'sync':
-                // console.log('sync', message.id);
                 windowsState[message.id].isActive = true;
                 break;
             case 'data':
@@ -45,6 +37,7 @@ onconnect = function (e) {
 
     }
 }
+
 setInterval(() => {
     windowsState = Object.fromEntries(Object.entries(windowsState).filter(([, value]) => value.isActive).map(([key, state]) => ([key, {
         ...state,

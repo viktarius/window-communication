@@ -30,7 +30,7 @@ export class CanvasService {
         const centerX = this.width / 2;
         const centerY = this.height / 2;
 
-        return { centerX, centerY };
+        return { x: centerX, y: centerY };
     }
 
     public getOtherPointPosition(point: GlobalPoint, centerPoint: GlobalPoint): Point {
@@ -39,7 +39,7 @@ export class CanvasService {
         const centerX = globalXPosition - centerPoint.globalXPosition + window.innerWidth / 2;
         const centerY = globalYPosition - centerPoint.globalYPosition + window.innerHeight / 2;
 
-        return { centerX, centerY };
+        return { x: centerX, y: centerY };
     }
 
 

@@ -14,9 +14,8 @@ export class DrawService {
 
         const points: Point[] = lastData.map(point => this.canvasService.getOtherPointPosition(point, currentPoint))
         points.push(this.canvasService.getCanvasCenterPoint());
-        console.log(points);
-        points.forEach(({ centerX, centerY }) => {
-            this.drawCircle(centerX, centerY)
+        points.forEach(({ x, y }) => {
+            this.drawCircle(x, y)
         })
         const lines: [Point, Point][] = [];
         for (let i = 0; i < points.length; i++) {
@@ -42,8 +41,8 @@ export class DrawService {
     private drawLine(line: [Point, Point]): void {
         setTimeout(() => {
             this.canvasService.context.beginPath();
-            this.canvasService.context.moveTo(line[0].centerX, line[0].centerY);
-            this.canvasService.context.lineTo(line[1].centerX, line[1].centerY);
+            this.canvasService.context.moveTo(line[0].x, line[0].y);
+            this.canvasService.context.lineTo(line[1].x, line[1].y);
             this.canvasService.context.stroke();
         })
     }
