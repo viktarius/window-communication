@@ -1,4 +1,4 @@
-import { MessageEventType, GlobalPoint } from './types.ts';
+import { MessageEventType, GlobalPoint } from '../core/types.ts';
 
 let windowsState: Record<string, {
     point: GlobalPoint;
