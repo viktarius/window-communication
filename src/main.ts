@@ -1,5 +1,6 @@
 import './style.css';
 
-import { WindowEventService } from './services/window-event.service.ts';
+import {container} from './inversify/inversify.config.ts';
+import { TYPES } from './inversify/types.ts';
 
-new WindowEventService();
+container.get(TYPES.WindowEvent);

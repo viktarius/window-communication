@@ -1,5 +1,7 @@
+import { injectable } from 'inversify';
 import { GlobalPoint, Point } from '../core/types.ts';
 
+@injectable()
 export class CanvasService {
     private readonly _context: CanvasRenderingContext2D;
     private readonly _canvas: HTMLCanvasElement;
@@ -17,6 +19,7 @@ export class CanvasService {
     }
 
     constructor() {
+        console.log('test3');
         this._canvas = document.createElement('canvas');
         this.updateCanvasSize();
 
