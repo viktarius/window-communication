@@ -1,12 +1,18 @@
+import { inject, injectable } from 'inversify';
+import { TYPES } from '../inversify/types.ts';
 import { GlobalPoint, Point } from '../core/types.ts';
 import { RADIUS } from '../core/constants.ts';
 import { CanvasService } from './canvas.service.ts';
 
+@injectable()
 export class DrawService {
-    private canvasService: CanvasService;
+    @inject(TYPES.Canvas) private canvasService: CanvasService;
 
-    constructor() {
-        this.canvasService = new CanvasService();
+    constructor(
+        @inject(TYPES.Canvas) canvasService: CanvasService
+    ) {
+        this.canvasService = canvasService;
+        console.log('test2');
     }
 
     public draw(lastData: GlobalPoint[], currentPoint: GlobalPoint) {
@@ -46,10 +52,4 @@ export class DrawService {
             this.canvasService.context.stroke();
         })
     }
-
-    // TODO: remove after add inversify
-    public updateCanvasSize(): void {
-        this.canvasService.updateCanvasSize();
-    }
-
 }
