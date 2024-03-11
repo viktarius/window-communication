@@ -19,7 +19,6 @@ export class CanvasService {
     }
 
     constructor() {
-        console.log('test3');
         this._canvas = document.createElement('canvas');
         this.updateCanvasSize();
 

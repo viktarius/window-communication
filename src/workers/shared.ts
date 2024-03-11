@@ -19,19 +19,15 @@ onconnect = function (e) {
                     point: message.point,
                     port: currentPort,
                 };
-                const ports = Object.entries(windowsState).map(([, value]) => value.port);
+                const ports = Object.entries(windowsState).map(([, { port }]) => port);
                 const dataToMessage = Object.entries(windowsState).reduce((acc: {
                     id: string,
                     point: GlobalPoint
-                }[], [key, value]) => {
-                    acc.push({ id: key, point: value.point });
+                }[], [key, { point }]) => {
+                    acc.push({ id: key, point });
                     return acc;
                 }, []);
-                ports.forEach((port) => {
-                    if (port !== currentPort) {
-                        port.postMessage(dataToMessage)
-                    }
-                })
+                ports.forEach((port) => port.postMessage(dataToMessage));
                 break;
         }
 
@@ -39,12 +35,27 @@ onconnect = function (e) {
 }
 
 setInterval(() => {
-    windowsState = Object.fromEntries(Object.entries(windowsState).filter(([, value]) => value.isActive).map(([key, state]) => ([key, {
-        ...state,
-        isActive: false
-    }])));
-    const ports = Object.entries(windowsState).map(([, value]) => value.port);
-    ports.forEach((port) => {
-        port.postMessage('sync')
-    })
+    let isNeedSendData = false;
+    windowsState = Object.fromEntries(
+        Object.entries(windowsState)
+            .filter(([, { isActive }]) => {
+                if (!isActive) {
+                    isNeedSendData = true;
+                }
+                return isActive;
+            })
+            .map(([key, state]) => ([key, { ...state, isActive: false }]))
+    );
+    const ports = Object.entries(windowsState).map(([, { port }]) => port);
+    ports.forEach((port) => port.postMessage('sync'));
+    if (isNeedSendData) {
+        const dataToMessage = Object.entries(windowsState).reduce((acc: {
+            id: string,
+            point: GlobalPoint
+        }[], [key, { point }]) => {
+            acc.push({ id: key, point });
+            return acc;
+        }, []);
+        ports.forEach((port) => port.postMessage(dataToMessage));
+    }
 }, 200)

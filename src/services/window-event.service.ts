@@ -7,13 +7,13 @@ import { CanvasService } from './canvas.service.ts';
 
 @injectable()
 export class WindowEventService {
-    private worker: SharedWorker = new SharedWorker(new URL('../workers/shared.ts', import.meta.url))
-    private browserMoveEvent = new CustomEvent('browserMove', { detail: 'browserPosition' });
+    private readonly worker: SharedWorker = new SharedWorker(new URL('../workers/shared.ts', import.meta.url))
+    private readonly browserMoveEvent = new CustomEvent('browserMove', { detail: 'browserPosition' });
 
     private drawService: DrawService;
     private canvasService: CanvasService;
 
-    private windowId: string = (+new Date).toString();
+    private readonly windowId: string = (+new Date).toString();
     private prevWindowState: any = {};
     private globalPoint: GlobalPoint = {
         globalXPosition: window.innerWidth / 2 + window.screenX,
@@ -39,7 +39,7 @@ export class WindowEventService {
             this.sendMessage(this.globalPoint);
             this.drawService.draw(this.lastData, this.globalPoint);
         });
-        setInterval(this.detectBrowserMove.bind(this), 200);
+        setInterval(this.detectBrowserMove.bind(this), 100);
 
         this.drawService.draw(this.lastData, this.globalPoint);
 

@@ -3,5 +3,3 @@ export const TYPES = {
     Canvas: Symbol('Canvas'),
     WindowEvent: Symbol('WindowEvent'),
 }
-
-
