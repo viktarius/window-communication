@@ -17,12 +17,12 @@
 
     /* Inversify */
     "target": "es5",
-    "lib": ["es6", "dom"],
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "types": ["reflect-metadata"],
     "module": "ESNext",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
   },
-  "include": ["src"]
+  "include": ["src"],
 }

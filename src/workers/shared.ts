@@ -2,7 +2,7 @@ import { GlobalPoint } from '../core/types.ts';
 import { IWindowState, RequestEventType } from './shared.types.ts';
 
 let windowsState: Record<string, IWindowState> = {};
-
+// @ts-ignore
 onconnect = function (e) {
     const currentPort = e.ports[0];
 
