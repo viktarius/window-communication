@@ -23,7 +23,7 @@ export class CanvasService {
 		this._canvas = document.createElement('canvas');
 		this.updateCanvasSize();
 
-		const appEl: HTMLElement = document.getElementById('app')!;
+		const appEl: HTMLElement = document.getElementById('my-app')!;
 		appEl.append(this._canvas);
 
 		this._context = this._canvas.getContext('2d')!;
